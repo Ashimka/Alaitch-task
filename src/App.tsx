@@ -1,11 +1,18 @@
-import Header from "./components/Header";
+import { Route, Routes } from "react-router-dom";
+
+import Home from "./pages/Home";
+
+import Layout from "./components/Layout";
 
 function App() {
   return (
     <>
-      <div className="lg:container px-5 mt-5">
-        <Header />
-      </div>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/login" element={<>Login</>} />
+        </Route>
+      </Routes>
     </>
   );
 }
