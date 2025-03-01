@@ -9,7 +9,7 @@ export const useInfo = () => {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch("/info.json", {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/info`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
