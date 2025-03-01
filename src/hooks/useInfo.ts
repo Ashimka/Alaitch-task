@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { IInfo } from "@/types";
+import { IApiResponse, IInfoData } from "@/types";
 
 export const useInfo = () => {
-  const [data, setData] = useState<IInfo | null>(null);
-  const [error, setError] = useState("");
+  const [data, setData] = useState<IApiResponse<IInfoData> | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchData = useCallback(async () => {
@@ -18,9 +18,9 @@ export const useInfo = () => {
         throw new Error("Access denied.");
       }
 
-      const info = await response.json();
+      const info: IApiResponse<IInfoData> = await response.json();
 
-      setData(info.data);
+      setData(info);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);

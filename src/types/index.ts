@@ -1,6 +1,12 @@
-export interface IInfo {
+export interface IApiResponse<T> {
   success: boolean;
-  info: {
-    data: string;
-  };
+  data: T;
+}
+
+export interface IInfoData {
+  info: string;
+}
+
+export interface ILoginData {
+  token: string;
 }
