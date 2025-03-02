@@ -7,7 +7,7 @@ const Layout = () => {
     <>
       <div className="lg:container px-5 mt-5">
         <Header />
-        <main className="mt-5">
+        <main className="mt-8">
           <Outlet />
         </main>
       </div>

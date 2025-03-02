@@ -1,10 +1,15 @@
+import AuthForm from "@/components/login/AuthForm";
 import { useEffect } from "react";
 
 const Login = () => {
   useEffect(() => {
     document.title = "Sign in";
   }, []);
-  return <div>Login</div>;
+  return (
+    <>
+      <AuthForm />
+    </>
+  );
 };
 
 export default Login;

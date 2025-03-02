@@ -10,3 +10,8 @@ export interface IInfoData {
 export interface ILoginData {
   token: string;
 }
+
+export interface IRequestAuth {
+  email: string;
+  password: string;
+}
