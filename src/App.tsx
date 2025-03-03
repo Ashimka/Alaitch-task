@@ -1,8 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 
-import Home from "./pages/Home";
-
 import Layout from "./components/Layout";
+import RequireAuth from "./components/RequireAuth";
+
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 
 function App() {
@@ -12,7 +13,9 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<> Profile page </>} />
+          <Route element={<RequireAuth />}>
+            <Route path="/profile" element={<> Profile page </>} />
+          </Route>
         </Route>
       </Routes>
     </>

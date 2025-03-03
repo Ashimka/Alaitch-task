@@ -9,7 +9,7 @@ export const saveTokenStorage = (token: string) => {
   Cookies.set("token", token, {
     path: "/",
     sameSite: "Strict",
-    expires: 1,
+    expires: 10,
     secure: import.meta.env.VITE_MODE === "production",
   });
 };
