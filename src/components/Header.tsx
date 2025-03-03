@@ -6,11 +6,11 @@ import { IApiResponse, ILogoutData } from "@/types";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, accessToken, logout } = useAuth();
 
   const handleLogout = async () => {
     const isLogout = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/logout?token=${1}`,
+      `${import.meta.env.VITE_SERVER_URL}/logout?token=${accessToken}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
