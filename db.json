@@ -17,5 +17,9 @@
       "fullname": "Aleksei K",
       "email": "aleksei@example.com"
     }
+  },
+  "logout": {
+    "success": true,
+    "data": {}
   }
 }

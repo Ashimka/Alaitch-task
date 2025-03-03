@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useAuth } from "@/context/AuthContext";
+
 import { Button } from "../ui/Button";
 import {
   Form,
@@ -24,6 +26,7 @@ const USER: IRequestAuth = {
 };
 
 const AuthForm = () => {
+  const { login } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const form = useForm<FormData>({
@@ -60,6 +63,7 @@ const AuthForm = () => {
     }
 
     saveTokenStorage(data.data.token);
+    login(data.data.token);
 
     navigate("/profile");
 

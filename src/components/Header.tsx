@@ -1,10 +1,29 @@
-import { Link } from "react-router-dom";
-import { Button } from "./ui/Button";
-
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 
+import { Button } from "./ui/Button";
+import { IApiResponse, ILogoutData } from "@/types";
+
 const Header = () => {
-  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
+
+  const handleLogout = async () => {
+    const isLogout = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}/logout?token=${1}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        // method: "DELETE",
+      }
+    );
+    const isLogouted: IApiResponse<ILogoutData> = await isLogout.json();
+
+    if (isLogouted.success) {
+      logout();
+      navigate("/");
+    }
+  };
 
   return (
     <>
@@ -17,7 +36,7 @@ const Header = () => {
             <Button variant="outline" size="sm">
               <Link to={"/profile"}>Profile</Link>
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={handleLogout}>
               Sign out
             </Button>
           </>
