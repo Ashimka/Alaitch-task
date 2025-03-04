@@ -5,6 +5,7 @@ import RequireAuth from "./components/RequireAuth";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route element={<RequireAuth />}>
-            <Route path="/profile" element={<> Profile page </>} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
         </Route>
       </Routes>

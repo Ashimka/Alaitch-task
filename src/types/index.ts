@@ -19,3 +19,9 @@ export interface IRequestAuth {
 export interface ILogoutData {
   data: Record<string, unknown>;
 }
+
+export interface IProfileData {
+  fullname: string;
+  email: string;
+  avatar?: string;
+}
