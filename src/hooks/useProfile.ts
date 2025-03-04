@@ -10,7 +10,7 @@ export const useProfile = (token: string) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/profile?token=${token}`,
+        `${import.meta.env.VITE_SERVER_URL}/profile?token=${token}g`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

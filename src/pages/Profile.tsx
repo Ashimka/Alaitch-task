@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/Button";
+import ModalRequest from "@/components/ModalRequest";
+// import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/context/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useEffect } from "react";
@@ -27,9 +28,7 @@ const Profile = () => {
               <h2 className="text-2xl font-semibold">{`Welcome, ${
                 data.data.fullname.split(" ")[0]
               }!`}</h2>
-              <Button variant="primary" size="sm" className="mr-auto">
-                Update
-              </Button>
+              <ModalRequest />
             </div>
           </div>
           <p className="mt-2 text-gray-600">
