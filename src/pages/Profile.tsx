@@ -1,11 +1,23 @@
-import ModalRequest from "@/components/ModalRequest";
-// import { Button } from "@/components/ui/Button";
+import { useEffect, useState } from "react";
+
 import { useAuth } from "@/context/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
-import { useEffect } from "react";
+
+import ModalRequest from "@/components/ModalRequest";
+import { IApiResponse, IErrorData, IQuoteData } from "@/types";
 
 const Profile = () => {
   const { accessToken } = useAuth();
+  const [quoteResult, setQuoteResult] = useState<IApiResponse<
+    IQuoteData | IErrorData
+  > | null>(null);
+
+  const handleResultChange = (
+    result: IApiResponse<IQuoteData | IErrorData> | null
+  ) => {
+    setQuoteResult(result); // Сохраняем результат в состоянии родительского компонента
+  };
+
   const { data, error, loading } = useProfile(accessToken);
 
   useEffect(() => {
@@ -28,12 +40,12 @@ const Profile = () => {
               <h2 className="text-2xl font-semibold">{`Welcome, ${
                 data.data.fullname.split(" ")[0]
               }!`}</h2>
-              <ModalRequest />
+              <ModalRequest onResultChange={handleResultChange} />
             </div>
           </div>
-          <p className="mt-2 text-gray-600">
-            Некоторая информация о пользователе
-          </p>
+          {quoteResult?.success && (
+            <q>{(quoteResult.data as IQuoteData).quote}</q>
+          )}
         </>
       )}
     </>

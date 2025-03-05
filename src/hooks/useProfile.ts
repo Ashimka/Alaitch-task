@@ -1,5 +1,6 @@
-import { IApiResponse, IProfileData } from "@/types";
 import { useCallback, useEffect, useState } from "react";
+
+import { IApiResponse, IProfileData } from "@/types";
 
 export const useProfile = (token: string) => {
   const [data, setData] = useState<IApiResponse<IProfileData> | null>(null);
@@ -10,7 +11,7 @@ export const useProfile = (token: string) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/profile?token=${token}g`,
+        `${import.meta.env.VITE_SERVER_URL}/profile?token=${token}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
