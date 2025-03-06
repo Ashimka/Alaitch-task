@@ -33,25 +33,46 @@ const ModalRequest = ({ onResultChange }: ModalRequestProps) => {
     new Promise((resolve) => setTimeout(resolve, ms));
 
   const fetchData = async (url: string) => {
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+    }
     controllerRef.current = new AbortController();
     const signal = controllerRef.current.signal;
 
-    const response = await fetch(url, { signal });
+    try {
+      await delay(5000);
+      const response = await fetch(url, { signal });
 
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
 
-    const data = await response.json();
-    if (!data) {
-      onResultChange({
-        success: false,
-        data: {
-          message: "Access denied.",
-        },
-      });
+      const data = await response.json();
+
+      if (!data) {
+        return onResultChange({
+          success: false,
+          data: {
+            message: "Access denied.",
+          },
+        });
+      }
+
+      return data;
+    } catch (error) {
+      if (error === "AbortError") {
+        onResultChange({
+          success: false,
+          data: {
+            message: "Access denied.",
+          },
+        });
+      } else {
+        throw error;
+      }
+    } finally {
+      controllerRef.current = null;
     }
-    return data;
   };
 
   const handleFetchClick = async () => {
@@ -59,40 +80,54 @@ const ModalRequest = ({ onResultChange }: ModalRequestProps) => {
     setIsAuthorId(false);
     setIsQuoteId(false);
 
-    await delay(5000);
-    const authorData: IAuthorData[] = await fetchData(
-      `${import.meta.env.VITE_SERVER_URL}/author?token=${accessToken}`
-    );
+    try {
+      const authorData: IAuthorData[] = await fetchData(
+        `${import.meta.env.VITE_SERVER_URL}/author?token=${accessToken}`
+      );
 
-    const { authorId } =
-      authorData[Math.floor(Math.random() * authorData.length)];
+      const { authorId } =
+        authorData[Math.floor(Math.random() * authorData.length)];
 
-    setIsAuthorId(!!authorId);
+      setIsAuthorId(!!authorId);
 
-    await delay(5000);
-    const quoteData: IQuoteData[] = await fetchData(
-      `${
-        import.meta.env.VITE_SERVER_URL
-      }/quote?token=${accessToken}&authorId=${authorId}`
-    );
+      await delay(5000);
+      const quoteData: IQuoteData[] = await fetchData(
+        `${
+          import.meta.env.VITE_SERVER_URL
+        }/quote?token=${accessToken}&authorId=${authorId}`
+      );
 
-    setIsQuoteId(!!quoteData);
+      setIsQuoteId(!!quoteData);
 
-    onResultChange({
-      success: true,
-      data: quoteData[Math.floor(Math.random() * quoteData.length)],
-    });
+      return onResultChange({
+        success: true,
+        data: quoteData[Math.floor(Math.random() * quoteData.length)],
+        ...authorData,
+      });
+    } catch (error) {
+      console.log(error);
+
+      if (error === "AbortError") {
+        onResultChange({
+          success: false,
+          data: {
+            message: "Произошла ошибка при выполнении запроса.",
+          },
+        });
+      } else {
+        onResultChange({
+          success: false,
+          data: {
+            message: "Произошла ошибка при выполнении запроса!",
+          },
+        });
+      }
+    }
   };
 
   const handleCancelClick = () => {
     if (controllerRef.current) {
       controllerRef.current.abort();
-      onResultChange({
-        success: false,
-        data: {
-          message: "Запрос отменен.",
-        },
-      });
     }
   };
 

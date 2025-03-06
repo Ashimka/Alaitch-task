@@ -15,7 +15,7 @@ const Profile = () => {
   const handleResultChange = (
     result: IApiResponse<IQuoteData | IErrorData> | null
   ) => {
-    setQuoteResult(result); // Сохраняем результат в состоянии родительского компонента
+    setQuoteResult(result);
   };
 
   const { data, error, loading } = useProfile(accessToken);
@@ -44,7 +44,12 @@ const Profile = () => {
             </div>
           </div>
           {quoteResult?.success && (
-            <q>{(quoteResult.data as IQuoteData).quote}</q>
+            <>
+              <q>{(quoteResult.data as IQuoteData).quote}</q>
+            </>
+          )}
+          {quoteResult?.success === false && (
+            <span>{(quoteResult.data as IErrorData).message}</span>
           )}
         </>
       )}
