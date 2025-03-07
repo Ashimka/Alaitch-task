@@ -4,18 +4,22 @@ import { useAuth } from "@/context/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 
 import ModalRequest from "@/components/ModalRequest";
-import { IApiResponse, IErrorData, IQuoteData } from "@/types";
+import { IApiResponse, IAuthorData, IErrorData, IQuoteData } from "@/types";
 
 const Profile = () => {
   const { accessToken } = useAuth();
   const [quoteResult, setQuoteResult] = useState<IApiResponse<
     IQuoteData | IErrorData
   > | null>(null);
+  const [author, setAuthor] = useState<IAuthorData | null>(null);
 
   const handleResultChange = (
     result: IApiResponse<IQuoteData | IErrorData> | null
   ) => {
     setQuoteResult(result);
+  };
+  const handleAuthorQuote = (author: IAuthorData | null) => {
+    setAuthor(author);
   };
 
   const { data, error, loading } = useProfile(accessToken);
@@ -40,12 +44,20 @@ const Profile = () => {
               <h2 className="text-2xl font-semibold">{`Welcome, ${
                 data.data.fullname.split(" ")[0]
               }!`}</h2>
-              <ModalRequest onResultChange={handleResultChange} />
+              <ModalRequest
+                onResultChange={handleResultChange}
+                authorQuote={handleAuthorQuote}
+              />
             </div>
           </div>
           {quoteResult?.success && (
             <>
               <q>{(quoteResult.data as IQuoteData).quote}</q>
+              {author && (
+                <>
+                  <i className="ml-1 uppercase">{author.name}</i>
+                </>
+              )}
             </>
           )}
           {quoteResult?.success === false && (

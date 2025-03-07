@@ -20,9 +20,10 @@ interface ModalRequestProps {
   onResultChange: (
     result: IApiResponse<IQuoteData | IErrorData> | null
   ) => void;
+  authorQuote: (author: IAuthorData | null) => void;
 }
 
-const ModalRequest = ({ onResultChange }: ModalRequestProps) => {
+const ModalRequest = ({ onResultChange, authorQuote }: ModalRequestProps) => {
   const [isAuthorId, setIsAuthorId] = useState(false);
   const [isQuoteId, setIsQuoteId] = useState(false);
   const { accessToken } = useAuth();
@@ -81,29 +82,31 @@ const ModalRequest = ({ onResultChange }: ModalRequestProps) => {
     setIsQuoteId(false);
 
     try {
-      const authorData: IAuthorData[] = await fetchData(
+      const authorsData: IAuthorData[] = await fetchData(
         `${import.meta.env.VITE_SERVER_URL}/author?token=${accessToken}`
       );
 
-      const { authorId } =
-        authorData[Math.floor(Math.random() * authorData.length)];
+      const authorData =
+        authorsData[Math.floor(Math.random() * authorsData.length)];
 
-      setIsAuthorId(!!authorId);
+      setIsAuthorId(!!authorData);
 
       await delay(5000);
       const quoteData: IQuoteData[] = await fetchData(
         `${
           import.meta.env.VITE_SERVER_URL
-        }/quote?token=${accessToken}&authorId=${authorId}`
+        }/quote?token=${accessToken}&authorId=${authorData.authorId}`
       );
 
       setIsQuoteId(!!quoteData);
 
-      return onResultChange({
-        success: true,
-        data: quoteData[Math.floor(Math.random() * quoteData.length)],
-        ...authorData,
-      });
+      return (
+        onResultChange({
+          success: true,
+          data: quoteData[Math.floor(Math.random() * quoteData.length)],
+        }),
+        authorQuote(authorData)
+      );
     } catch (error) {
       console.log(error);
 
