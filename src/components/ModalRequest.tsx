@@ -24,8 +24,10 @@ interface ModalRequestProps {
 }
 
 const ModalRequest = ({ onResultChange, authorQuote }: ModalRequestProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [isAuthorId, setIsAuthorId] = useState(false);
   const [isQuoteId, setIsQuoteId] = useState(false);
+
   const { accessToken } = useAuth();
 
   const controllerRef = useRef<AbortController | null>(null);
@@ -80,6 +82,7 @@ const ModalRequest = ({ onResultChange, authorQuote }: ModalRequestProps) => {
     onResultChange(null);
     setIsAuthorId(false);
     setIsQuoteId(false);
+    setIsOpen(true);
 
     try {
       const authorsData: IAuthorData[] = await fetchData(
@@ -108,8 +111,6 @@ const ModalRequest = ({ onResultChange, authorQuote }: ModalRequestProps) => {
         authorQuote(authorData)
       );
     } catch (error) {
-      console.log(error);
-
       if (error === "AbortError") {
         onResultChange({
           success: false,
@@ -125,6 +126,9 @@ const ModalRequest = ({ onResultChange, authorQuote }: ModalRequestProps) => {
           },
         });
       }
+    } finally {
+      await delay(500);
+      setIsOpen(false);
     }
   };
 
@@ -136,7 +140,7 @@ const ModalRequest = ({ onResultChange, authorQuote }: ModalRequestProps) => {
 
   return (
     <>
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <Button
             onClick={handleFetchClick}
