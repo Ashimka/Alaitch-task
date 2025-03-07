@@ -94,7 +94,6 @@ const ModalRequest = ({ onResultChange, authorQuote }: ModalRequestProps) => {
 
       setIsAuthorId(!!authorData);
 
-      await delay(5000);
       const quoteData: IQuoteData[] = await fetchData(
         `${
           import.meta.env.VITE_SERVER_URL
